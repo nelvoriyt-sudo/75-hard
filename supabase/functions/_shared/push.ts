@@ -77,10 +77,16 @@ export async function sendPush(cfg: PushConfig, target: Target, msg: Message): P
       urgency: 'normal',
     },
   )
+  // fetch sets Content-Length itself.
+  const headers = Object.fromEntries(
+    Object.entries(details.headers as Record<string, string | number>)
+      .filter(([k]) => k.toLowerCase() !== 'content-length')
+      .map(([k, v]) => [k, String(v)]),
+  )
   try {
     const res = await fetch(details.endpoint, {
       method: details.method,
-      headers: details.headers as Record<string, string>,
+      headers,
       body: details.body as Uint8Array,
       redirect: 'error',
       signal: AbortSignal.timeout(10_000),
