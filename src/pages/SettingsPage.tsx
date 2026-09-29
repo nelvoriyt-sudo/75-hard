@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'preact/hooks'
 import { IconBack, IconBell, IconShare } from '../components/Icons'
 import { useToast } from '../components/Toast'
-import { errorMessage, fetchProfile, sendTestPush, updateProfile, type Profile } from '../lib/data'
+import { errorMessage, fetchProfile, sendTestPush, setAccent, updateProfile, type Profile } from '../lib/data'
 import { LIMITS } from '../lib/presets'
 import { disablePush, enablePush, isAppleMobile, isOnHere, isStandalone, pushSupport, PushError } from '../lib/push'
 import { href } from '../lib/router'
 import { supabase } from '../lib/supabase'
+import { ACCENTS, applyAccent, type Accent } from '../lib/theme'
 
-type Form = Omit<Profile, 'user_id'>
+type Form = Omit<Profile, 'user_id' | 'accent'>
 const hhmm = (t: string) => t.slice(0, 5)
 
 export function SettingsPage() {
@@ -17,6 +18,7 @@ export function SettingsPage() {
   const [loadError, setLoadError] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
   const [formError, setFormError] = useState<string | null>(null)
+  const [accent, setAccentState] = useState<Accent | null>(null)
 
   useEffect(() => {
     fetchProfile()
@@ -31,6 +33,7 @@ export function SettingsPage() {
         }
         setForm(f)
         setSaved(f)
+        setAccentState(p.accent)
       })
       .catch((e) => setLoadError(errorMessage(e)))
   }, [])
@@ -114,12 +117,51 @@ export function SettingsPage() {
           </form>
         )}
 
+        {accent && <ThemePicker value={accent} onChange={setAccentState} />}
         <DeviceNotifications />
         <InstallHelp />
 
         <button type="button" class="btn btn-secondary btn-block" onClick={signOut}>Sign out</button>
       </main>
     </>
+  )
+}
+
+function ThemePicker({ value, onChange }: { value: Accent; onChange: (a: Accent) => void }) {
+  const toast = useToast()
+
+  async function choose(next: Accent) {
+    const previous = value
+    onChange(next)
+    applyAccent(next) // instant preview; saved below
+    try {
+      await setAccent(next)
+    } catch (e) {
+      onChange(previous)
+      applyAccent(previous)
+      toast(errorMessage(e), 'error')
+    }
+  }
+
+  return (
+    <section class="card" aria-labelledby="theme-h">
+      <h2 id="theme-h" class="label">Theme</h2>
+      <fieldset class="swatches">
+        <legend class="visually-hidden">Accent colour</legend>
+        {ACCENTS.map((a) => (
+          <div key={a.id} class="swatch">
+            <input
+              type="radio" name="accent" id={`accent-${a.id}`} value={a.id}
+              checked={value === a.id} onChange={() => void choose(a.id)}
+            />
+            <label for={`accent-${a.id}`}>
+              <i style={{ background: a.color }} aria-hidden="true" />
+              {a.label}
+            </label>
+          </div>
+        ))}
+      </fieldset>
+    </section>
   )
 }
 

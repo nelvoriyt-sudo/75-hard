@@ -19,8 +19,8 @@
   --faint: #6f6f76;
   --volt: #d4ff3a;
   --volt-ink: #0a0a0b;
-  --volt-soft: rgb(212 255 58 / 0.12);
-  --volt-line: rgb(212 255 58 / 0.35);
+  --volt-soft: color-mix(in srgb, var(--volt) 12%, transparent);
+  --volt-line: color-mix(in srgb, var(--volt) 35%, transparent);
   --danger: #ff6b6b;
   --danger-fill: #d62828;
   --danger-soft: rgb(255 107 107 / 0.12);
@@ -45,6 +45,13 @@
 
   --focus: 0 0 0 2px var(--page), 0 0 0 4px var(--volt);
 }
+
+/* Accent themes (Settings → Theme). "volt" is the name of the signal colour role, whatever its hue. */
+:root[data-accent='blaze'] { --volt: #ff8a3d; }
+:root[data-accent='ice'] { --volt: #5ad1ff; }
+:root[data-accent='violet'] { --volt: #b69cff; }
+:root[data-accent='gold'] { --volt: #ffd23f; }
+:root[data-accent='rose'] { --volt: #ff7ab6; }
 
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; background: var(--page); }
@@ -138,7 +145,7 @@ svg { flex: none; }
 .btn-lg { min-height: 56px; font-size: 1.0625rem; }
 .btn-sm { min-height: 40px; padding: 0 14px; font-size: 0.9375rem; }
 .btn-primary { background: var(--volt); color: var(--volt-ink); }
-.btn-primary:hover:not(:disabled) { background: #e0ff6b; }
+.btn-primary:hover:not(:disabled) { background: color-mix(in srgb, var(--volt) 82%, #fff); }
 .btn-secondary { background: var(--card-2); border-color: var(--line); }
 .btn-secondary:hover:not(:disabled) { background: #2a2a30; }
 .btn-ghost { background: transparent; }
@@ -160,7 +167,7 @@ svg { flex: none; }
   background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg);
   padding: 18px; display: flex; flex-direction: column; gap: 14px; min-width: 0;
 }
-.card-volt { background: linear-gradient(160deg, rgb(212 255 58 / 0.14), rgb(212 255 58 / 0.03) 60%), var(--card); border-color: var(--volt-line); }
+.card-volt { background: linear-gradient(160deg, color-mix(in srgb, var(--volt) 14%, transparent), color-mix(in srgb, var(--volt) 3%, transparent) 60%), var(--card); border-color: var(--volt-line); }
 .card-danger { background: var(--danger-soft); border-color: rgb(255 107 107 / 0.35); }
 .card-empty { border-style: dashed; border-color: var(--line-strong); align-items: center; text-align: center; padding: 32px 20px; }
 a.card, button.card { text-align: left; color: inherit; text-decoration: none; transition: border-color var(--fast) ease, transform var(--med) var(--spring); }
@@ -206,7 +213,7 @@ a.card:active, button.card:active { transform: scale(0.985); }
 }
 .input::placeholder { color: var(--faint); }
 .input:hover { border-color: rgb(255 255 255 / 0.4); }
-.input:focus-visible { border-color: var(--volt); box-shadow: 0 0 0 3px rgb(212 255 58 / 0.25); border-radius: var(--r); }
+.input:focus-visible { border-color: var(--volt); box-shadow: 0 0 0 3px color-mix(in srgb, var(--volt) 25%, transparent); border-radius: var(--r); }
 .input[aria-invalid='true'] { border-color: var(--danger); }
 input.input[type='date'], input.input[type='time'] { -webkit-appearance: none; appearance: none; display: block; min-width: 0; line-height: 46px; text-align: left; }
 input.input[type='time'] { width: 8.5rem; }
@@ -254,7 +261,7 @@ input.input[type='time'] { width: 8.5rem; }
 .check-row input:checked + label { background: var(--volt-soft); border-color: var(--volt-line); }
 .check-row input:checked + label .check-box { background: var(--volt); border-color: var(--volt); transform: scale(1.06); }
 .check-row input:checked + label .check-box svg { opacity: 1; transform: scale(1); }
-.check-row input:checked + label .check-title { color: var(--ink); text-decoration: line-through; text-decoration-color: rgb(212 255 58 / 0.7); text-decoration-thickness: 2px; }
+.check-row input:checked + label .check-title { color: var(--ink); text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--volt) 70%, transparent); text-decoration-thickness: 2px; }
 .check-row input:focus-visible + label { box-shadow: var(--focus); }
 .check-row input:disabled + label { cursor: default; opacity: 0.7; }
 .check-title { font-weight: 700; font-size: 1.0625rem; line-height: 1.25; overflow-wrap: anywhere; }
@@ -277,7 +284,7 @@ input.input[type='time'] { width: 8.5rem; }
 .wall { display: grid; grid-template-columns: repeat(15, minmax(0, 1fr)); gap: 4px; }
 .wall span { aspect-ratio: 1; border-radius: 3px; background: rgb(255 255 255 / 0.07); }
 .wall .done { background: var(--volt); }
-.wall .partial { background: rgb(212 255 58 / 0.35); }
+.wall .partial { background: color-mix(in srgb, var(--volt) 35%, transparent); }
 .wall .today { box-shadow: inset 0 0 0 2px var(--volt); }
 .wall .missed { background: var(--danger); }
 
@@ -317,6 +324,19 @@ input.input[type='time'] { width: 8.5rem; }
 .tab:hover { color: var(--ink); }
 .tab[aria-current='page']:hover { color: var(--volt); }
 
+/* ── Theme swatches */
+.swatches { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; border: 0; margin: 0; padding: 0; }
+.swatch { position: relative; }
+.swatch input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.swatch label {
+  display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 8px 12px; border-radius: var(--r);
+  background: var(--surface); border: 1px solid var(--line); cursor: pointer; font-weight: 600; font-size: 0.9375rem;
+  transition: border-color var(--fast) ease;
+}
+.swatch label i { width: 22px; height: 22px; border-radius: 50%; flex: none; }
+.swatch input:checked + label { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+.swatch input:focus-visible + label { box-shadow: var(--focus); }
+
 /* ── Dialog */
 dialog.sheet {
   width: min(100% - 32px, 26rem); max-height: calc(100dvh - 32px); padding: 0; border: 1px solid var(--line-strong);
@@ -340,7 +360,7 @@ dialog.sheet[open] { animation: rise var(--med) var(--ease); }
 .hero-glow { position: relative; isolation: isolate; }
 .hero-glow::before {
   content: ''; position: absolute; inset: -120px 0 auto; height: 320px; z-index: -1;
-  background: radial-gradient(closest-side, rgb(212 255 58 / 0.18), transparent);
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--volt) 18%, transparent), transparent);
   pointer-events: none;
 }
 .wordmark { font-family: var(--font-display); text-transform: uppercase; line-height: 0.85; letter-spacing: 0.01em; }

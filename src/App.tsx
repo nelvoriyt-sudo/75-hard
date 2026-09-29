@@ -1,7 +1,9 @@
 import type { Session } from '@supabase/supabase-js'
 import { useEffect, useState } from 'preact/hooks'
 import { ToastProvider } from './components/Toast'
+import { fetchProfile } from './lib/data'
 import { supabase } from './lib/supabase'
+import { applyAccent } from './lib/theme'
 import { useRoute } from './lib/router'
 import { AuthPage } from './pages/AuthPage'
 import { ChallengePage } from './pages/ChallengePage'
@@ -20,6 +22,12 @@ export function App() {
   }, [])
 
   const userId = session?.user.id
+
+  // Use the signed-in person's saved theme (the cached one already applied at startup).
+  useEffect(() => {
+    if (!userId) return
+    fetchProfile().then((p) => { if (p) applyAccent(p.accent) }).catch(() => undefined)
+  }, [userId])
   return (
     <ToastProvider>
       <div class="app">

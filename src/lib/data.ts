@@ -4,6 +4,7 @@ import { FunctionsHttpError } from '@supabase/supabase-js'
 import { supabase } from './supabase'
 import type { Challenge, Completion, Task } from './challenge'
 import type { IsoDate } from './dates'
+import { isAccent, type Accent } from './theme'
 
 export type Profile = {
   user_id: string
@@ -12,6 +13,7 @@ export type Profile = {
   morning_time: string
   evening_enabled: boolean
   evening_time: string
+  accent: Accent
 }
 
 export type ChallengeBundle = { challenge: Challenge; tasks: Task[]; completions: Completion[] }
@@ -54,10 +56,16 @@ const CHALLENGE_COLUMNS =
 export async function fetchProfile(): Promise<Profile | null> {
   const { data, error } = await supabase
     .from('profiles')
-    .select('user_id, display_name, morning_enabled, morning_time, evening_enabled, evening_time')
+    .select('user_id, display_name, morning_enabled, morning_time, evening_enabled, evening_time, accent')
     .maybeSingle()
   if (error) fail(error)
-  return data
+  if (!data) return null
+  return { ...data, accent: isAccent(data.accent) ? data.accent : 'volt' }
+}
+
+export async function setAccent(accent: Accent): Promise<void> {
+  const { error } = await supabase.rpc('set_accent', { p_accent: accent })
+  if (error) fail(error)
 }
 
 /** Settles an ended active challenge (missed day or past day 75) before anything is shown. */
@@ -121,7 +129,7 @@ export async function failChallenge(id: string): Promise<void> {
   if (error) fail(error)
 }
 
-export async function updateProfile(p: Omit<Profile, 'user_id'>): Promise<void> {
+export async function updateProfile(p: Omit<Profile, 'user_id' | 'accent'>): Promise<void> {
   const { error } = await supabase.rpc('update_profile', {
     p_display_name: p.display_name,
     p_morning_enabled: p.morning_enabled,
