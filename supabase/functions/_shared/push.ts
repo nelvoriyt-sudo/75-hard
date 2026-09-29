@@ -2,7 +2,7 @@
 import { createClient, type SupabaseClient } from 'npm:@supabase/supabase-js@2.117.2'
 import webpush from 'npm:web-push@3.6.7'
 
-export const APP_URL = 'https://nelvoriyt-sudo.github.io/75-hard/'
+export const APP_URL = 'https://75-hard.vercel.app/'
 
 export type Target = { endpoint: string; p256dh: string; auth: string }
 export type Message = { title: string; body: string; tag: string }

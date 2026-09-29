@@ -10,7 +10,7 @@ A 75 Hard challenge tracker you can install on your phone's Home Screen. Each pe
 
 ## Stack
 
-- Preact + Vite + TypeScript, hosted on GitHub Pages (`.github/workflows/deploy.yml`).
+- Preact + Vite + TypeScript, hosted on Vercel (`vercel.json` sets the security headers). Pushes to `main` deploy automatically.
 - Supabase Auth and Postgres (`supabase/migrations`). Every table uses row level security and is read-only to clients. All writes go through database functions that check the signed-in user and the challenge rules.
 - Supabase Edge Functions (`supabase/functions`) send Web Push reminders. `pg_cron` calls them every 5 minutes. The VAPID private key and the cron secret are stored in Supabase Vault and never in this repo.
 
@@ -18,7 +18,7 @@ A 75 Hard challenge tracker you can install on your phone's Home Screen. Each pe
 
 ```sh
 npm install
-npm run dev        # http://localhost:5173/75-hard/
+npm run dev        # http://localhost:5173/
 npm test
 npm run build
 ```
