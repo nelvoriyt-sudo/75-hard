@@ -108,7 +108,7 @@ export function SettingsPage() {
             </section>
 
             {formError && <p class="error-text" role="alert">{formError}</p>}
-            <button class="btn btn-primary btn-block btn-lg" type="submit" disabled={saving || !dirty}>
+            <button class={`btn btn-block btn-lg ${dirty ? 'btn-primary' : 'btn-secondary'}`} type="submit" disabled={saving || !dirty}>
               {saving ? 'Saving…' : dirty ? 'Save changes' : 'Saved'}
             </button>
           </form>

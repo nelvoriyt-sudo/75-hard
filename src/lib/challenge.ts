@@ -73,8 +73,9 @@ export function summarize(ch: Challenge, tasks: Task[], completions: Completion[
   const phase: Summary['phase'] =
     ch.status !== 'active' || today > ch.end_date ? 'ended' : today < ch.start_date ? 'upcoming' : 'running'
 
-  const rawDay = diffDays(ch.start_date, today) + 1
-  const dayNumber = phase === 'upcoming' ? 0 : Math.min(Math.max(rawDay, 1), CHALLENGE_DAYS)
+  // The day reached: today while running, the last live day once it has ended.
+  const reached = phase === 'ended' ? lastLiveDay(ch, today) : today
+  const dayNumber = phase === 'upcoming' ? 0 : Math.min(Math.max(diffDays(ch.start_date, reached) + 1, 1), CHALLENGE_DAYS)
 
   // Streak: consecutive full days ending today (if today is full) or yesterday.
   let streak = 0

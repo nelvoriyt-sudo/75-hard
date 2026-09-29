@@ -95,6 +95,16 @@ describe('summarize', () => {
   })
 })
 
+describe('summarize: failed challenge', () => {
+  it('reports the day it ended on, not day 75', () => {
+    const ch = challenge({ status: 'failed', end_reason: 'missed_day', missed_day: '2026-09-19', ended_at: '2026-09-20T09:00:00Z' })
+    const s = summarize(ch, tasks, fullDays('2026-09-01', 18), '2026-12-01')
+    expect(s.phase).toBe('ended')
+    expect(s.dayNumber).toBe(19)
+    expect(s.streak).toBe(18)
+  })
+})
+
 describe('dayState', () => {
   const byDay = completionsByDay([...fullDays('2026-09-01', 2), { task_id: 'a', day: '2026-09-03' }])
 
