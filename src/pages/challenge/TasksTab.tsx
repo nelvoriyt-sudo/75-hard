@@ -116,7 +116,7 @@ export function TasksTab({ bundle, today, summary: s, onChange, reload }: Props)
           {tasks.map((t) => <span key={t.id} class={doneToday.has(t.id) ? 'on' : ''} />)}
         </div>
         <p class="small muted" role="status">
-          {allDone ? 'Every task done. Rest up, it resets at midnight.' : 'Resets at midnight. Every task, every day.'}
+          {allDone ? 'Every task done. Rest up.' : 'Finish before bed. The day closes at 4 AM.'}
         </p>
       </section>
 

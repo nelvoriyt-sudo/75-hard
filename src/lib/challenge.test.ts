@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { addDays, addMonths, daysInMonth, diffDays, todayIn, weekday } from './dates'
+import { addDays, addMonths, challengeDay, daysInMonth, diffDays, todayIn, weekday } from './dates'
 import { completionsByDay, dayState, summarize, type Challenge, type Completion, type Task } from './challenge'
 
 describe('dates', () => {
@@ -25,6 +25,13 @@ describe('dates', () => {
     expect(addMonths('2026-12-15', 1)).toBe('2027-01-01')
     expect(daysInMonth('2028-02-10')).toBe(29)
     expect(weekday('2026-09-29')).toBe(2) // Tuesday
+  })
+
+  it('keeps a day open until 4 AM the next morning', () => {
+    // 11:50 PM and 3:59 AM in New York still count as Oct 7; 4:00 AM is Oct 8.
+    expect(challengeDay('America/New_York', new Date('2026-10-08T03:50:00Z'))).toBe('2026-10-07')
+    expect(challengeDay('America/New_York', new Date('2026-10-08T07:59:00Z'))).toBe('2026-10-07')
+    expect(challengeDay('America/New_York', new Date('2026-10-08T08:00:00Z'))).toBe('2026-10-08')
   })
 
   it('rejects malformed dates', () => {

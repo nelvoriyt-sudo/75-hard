@@ -4,7 +4,7 @@ A 75 Hard challenge tracker you can install on your phone's Home Screen. Each pe
 
 - **Home:** your current challenge (only one can be active at a time) and past ones.
 - **Create:** starts with the standard 75 Hard tasks. You can edit, add or remove tasks, then pick a start date. Challenges are locked once created.
-- **Dashboard / Tasks / Calendar:** progress, today's checklist (resets at midnight in the challenge's timezone) and a calendar of completed days.
+- **Dashboard / Tasks / Calendar:** progress, today's checklist (each day stays open until 4 AM the next morning, in the challenge's timezone) and a calendar of completed days.
 - **Rules:** if a day isn't fully checked off, the challenge fails automatically. You can also fail it yourself at any time.
 - **Reminders:** optional morning and evening push notifications.
 

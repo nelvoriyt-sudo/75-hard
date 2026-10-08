@@ -1,6 +1,6 @@
 // Pure challenge math shared by the dashboard, tasks and calendar views.
 // The database is the authority (it fails and finishes challenges); this only describes state.
-import { addDays, diffDays, type IsoDate } from './dates'
+import { addDays, challengeDay, diffDays, type IsoDate } from './dates'
 
 export const CHALLENGE_DAYS = 75
 
@@ -53,10 +53,8 @@ function lastLiveDay(ch: Challenge, today: IsoDate): IsoDate {
   if (ch.status === 'active') return today < ch.end_date ? today : ch.end_date
   if (ch.missed_day) return ch.missed_day
   if (ch.ended_at) {
-    // The day it was ended, in the challenge's own timezone.
-    const ended = new Intl.DateTimeFormat('en-CA', {
-      timeZone: ch.timezone, year: 'numeric', month: '2-digit', day: '2-digit',
-    }).format(new Date(ch.ended_at))
+    // The challenge day it was ended on.
+    const ended = challengeDay(ch.timezone, new Date(ch.ended_at))
     return ended < ch.end_date ? ended : ch.end_date
   }
   return ch.end_date

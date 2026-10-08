@@ -2,7 +2,7 @@ import { useEffect, useState } from 'preact/hooks'
 import { IconChevron, IconFlame, IconGear, IconPlus, IconTrophy } from '../components/Icons'
 import { summarize, type Challenge } from '../lib/challenge'
 import { errorMessage, fetchChallengeBundle, fetchProfile, listChallenges, syncMyChallenge, type ChallengeBundle, type Profile } from '../lib/data'
-import { longDate, shortDate, todayIn } from '../lib/dates'
+import { challengeDay, longDate, shortDate } from '../lib/dates'
 import { href } from '../lib/router'
 
 type State =
@@ -84,7 +84,7 @@ export function HomePage() {
 
 function ActiveCard({ bundle }: { bundle: ChallengeBundle }) {
   const { challenge, tasks, completions } = bundle
-  const today = todayIn(challenge.timezone)
+  const today = challengeDay(challenge.timezone)
   const s = summarize(challenge, tasks, completions, today)
   const todayPct = s.taskCount ? s.todayDone / s.taskCount : 0
 

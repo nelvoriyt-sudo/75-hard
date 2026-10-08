@@ -2,7 +2,7 @@ import { useEffect, useState } from 'preact/hooks'
 import { IconBack, IconLock, IconPlus, IconX } from '../components/Icons'
 import { useToast } from '../components/Toast'
 import { AppError, createChallenge, errorMessage, listChallenges } from '../lib/data'
-import { addDays, deviceTimeZone, longDate, shortDate, todayIn } from '../lib/dates'
+import { addDays, challengeDay, deviceTimeZone, longDate, shortDate } from '../lib/dates'
 import { LIMITS, newKey, presetDrafts, type TaskDraft } from '../lib/presets'
 import { href, navigate } from '../lib/router'
 
@@ -11,7 +11,7 @@ type StartChoice = 'today' | 'tomorrow' | 'pick'
 export function CreatePage() {
   const toast = useToast()
   const timezone = deviceTimeZone()
-  const today = todayIn(timezone)
+  const today = challengeDay(timezone)
 
   const [name, setName] = useState('75 Hard')
   const [tasks, setTasks] = useState<TaskDraft[]>(presetDrafts)
@@ -185,7 +185,7 @@ export function CreatePage() {
                 </div>
               </div>
               <p class="small muted">
-                75 days · {tasks.length} {tasks.length === 1 ? 'task' : 'tasks'} a day · days run midnight to midnight
+                75 days · {tasks.length} {tasks.length === 1 ? 'task' : 'tasks'} a day · each day stays open until 4 AM the next morning
                 ({timezone.replace(/_/g, ' ')})
               </p>
               <p class="row small" style={{ gap: '8px', alignItems: 'flex-start' }}>

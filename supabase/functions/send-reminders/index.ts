@@ -24,7 +24,7 @@ function message(row: DueRow): Message {
   const left = row.tasks_left === 1 ? '1 task' : `${row.tasks_left} tasks`
   return {
     title: `Day ${row.day_number}: ${left} left`,
-    body: 'Finish before midnight. No excuses.',
+    body: 'Finish before bed. No excuses.',
     tag: 'evening',
   }
 }

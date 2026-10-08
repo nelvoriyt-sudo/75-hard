@@ -38,6 +38,15 @@ export function todayIn(timeZone: string, now: Date = new Date()): IsoDate {
   return `${get('year')}-${get('month')}-${get('day')}`
 }
 
+/** A challenge day stays open until 4 AM the next morning ("before you go to bed"). Must match
+ *  public.local_today() in the database. */
+export const DAY_ROLLOVER_HOURS = 4
+
+/** The challenge day an instant belongs to, in an IANA timezone. */
+export function challengeDay(timeZone: string, now: Date = new Date()): IsoDate {
+  return todayIn(timeZone, new Date(now.getTime() - DAY_ROLLOVER_HOURS * 3_600_000))
+}
+
 export function deviceTimeZone(): string {
   return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'
 }

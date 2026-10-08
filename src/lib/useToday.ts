@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'preact/hooks'
-import { todayIn, type IsoDate } from './dates'
+import { challengeDay, type IsoDate } from './dates'
 
-/** Today's date in a timezone, updating at midnight and whenever the app comes back to the front. */
+/** The current challenge day, updating at the 4 AM rollover and whenever the app comes back to the front. */
 export function useToday(timeZone: string): IsoDate {
-  const [today, setToday] = useState(() => todayIn(timeZone))
+  const [today, setToday] = useState(() => challengeDay(timeZone))
   useEffect(() => {
-    const check = () => setToday(todayIn(timeZone))
+    const check = () => setToday(challengeDay(timeZone))
     check()
     const timer = window.setInterval(check, 30_000)
     document.addEventListener('visibilitychange', check)
